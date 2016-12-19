@@ -15,6 +15,7 @@ function Pickable() {
         image(img, this.x, this.y, img.width / this.scl, img.height / this.scl);
         textAlign(CENTER);
         textSize(15);
+        fill(255);
         text(this.text, this.x, this.y - 20);
     }
 

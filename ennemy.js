@@ -4,6 +4,12 @@ function Ennemy() {
     this.nbSprites = 17;
     this.speed = 3;
     this.state = STATE.MOVE;
+    this.tint = {
+        R: 255,
+        G: 255,
+        B: 255,
+        A: 0
+    }
 
     this.init = function() {
         if (random() < 0.5) {
@@ -32,7 +38,7 @@ function Ennemy() {
     this.init();
 
     this.getSpriteName = function() {
-        return (this.constructor.name + "." + this.state.toString()).toLowerCase();
+        return ("ennemy." + this.state.toString()).toLowerCase();
     }
 
     this.updateDir = function() {

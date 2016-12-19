@@ -1,11 +1,19 @@
 var player;
 var bullets = [];
 var ennemies = [];
-var ammoPacks = [];
+var pickables = [];
 var nbKills = 0;
 var ammos = [];
 
 var directionKeys = [-1, -1, -1, -1];
+
+function preload() {
+    getAssetManager().getSprites("player.rifle.idle", 20);
+    getAssetManager().getSprites("player.rifle.move", 20);
+
+    getAssetManager().getSprites("ennemy.move", 17);
+    getAssetManager().getSprites("ennemy.idle", 17);
+}
 
 function setup() {
     createCanvas(window.innerWidth, window.innerHeight);
@@ -20,14 +28,8 @@ function draw() {
     player.update();
     player.draw();
 
-    textSize(32);
-    fill(255);
-    textAlign(LEFT);
-    text("Score : " + player.score, 20, 30);
-    textAlign(RIGHT)
-    text("Ammo : " + player.weapon.nbAmmo, width - 20, height - 30);
-
     getFactory().createEnnemy();
+    getFactory().createAmmoPack();
 
     // GAME OVER
     if (player.state == STATE.DEAD) {
@@ -44,6 +46,17 @@ function draw() {
 
         bullet.update();
         bullet.draw();
+    }
+
+    for (var i = pickables.length - 1; i >= 0; i--) {
+        var pickable = pickables[i];
+
+        if (pickable.hits(player)) {
+            pickable.activate();
+            pickables.splice(i, 1);
+        }
+
+        pickable.draw();
     }
 
     // Ennemies
@@ -73,18 +86,33 @@ function draw() {
         ennemy.draw();
 
         if (player.hits(ennemy)) {
-            player.state = STATE.DEAD;
+            player.touched();
         }
 
         for (var j = bullets.length - 1; j >= 0; j--) {
             var bullet = bullets[j];
             if (ennemy.hits(bullet)) {
                 bullets.splice(j, 1);
-                ennemies.splice(i, 1);
+                ennemy.touched()
+                if (ennemy.state == STATE.DEAD) {
+                    ennemies.splice(i, 1);
+                }
                 player.score++;
             }
         }
     }
+
+    textSize(32);
+    fill(255);
+    textAlign(LEFT);
+    text("Score : " + player.score, 20, 30);
+    textAlign(RIGHT)
+    text(player.weapon.nbAmmo + "/" + player.weapon.capacity, width - 20, height - 30);
+    var bulletImg = new Info("bullet", width - 140, height - 40);
+    bulletImg.draw();
+    var bulletImg = new Info("weapon." + player.weapon.name, width - 100, height - 100);
+    bulletImg.draw();
+
 }
 
 

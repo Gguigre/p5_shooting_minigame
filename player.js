@@ -3,6 +3,12 @@ function Player() {
     Character.call(this);
     this.nbSprites = 20;
     this.state = STATE.IDLE;
+    this.tint = {
+        R: 255,
+        G: 255,
+        B: 255,
+        A: 0,
+    }
 
     this.score = 0;
 
@@ -27,7 +33,10 @@ function Player() {
     }
 
     this.shoot = function() {
-        if (this.weapon.nbAmmo <= 0) { return; }
+        if (this.weapon.nbAmmo <= 0) {
+            this.weapon.sounds.reload.play();
+            return;
+        }
         this.weapon.sounds.shoot.play();
         var img = this.sprites[0];
         switch (this.dir) {

@@ -9,6 +9,14 @@ function Character() {
     }
 
     this.dir = DIR.N;
+    this.health = 1;
+
+    this.touched = function() {
+        this.health--;
+        if (this.health <= 0) {
+            this.state = STATE.DEAD;
+        }
+    }
 
     this.stop = function() {
         this.speed.x = 0;
@@ -76,7 +84,11 @@ function Character() {
 
         img = this.sprites[(floor(frameCount / 5) + this.spriteOffset) % this.nbSprites];
         imageMode(CENTER);
+        if (this.tint.R + this.tint.G + this.tint.B != 3 * 255) {
+            tint(this.tint.R, this.tint.G, this.tint.B);
+        }
         image(img, 0, 0, img.width / this.scl, img.height / this.scl);
+        noTint();
         pop();
     }
 }

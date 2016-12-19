@@ -10,10 +10,10 @@ function getFactory() {
 function Factory() {
 
     this.ennemyTimeout = 0;
-    this.ammoTimeout = 0;
+    this.ammoPackTimeout = 0;
 
     this.createAmmoPack = function() {
-        if (frameCount >= this.ammoTimeout) {
+        if (frameCount >= this.ammoPackTimeout) {
             this.generateAmmoPack();
         }
     }
@@ -21,14 +21,14 @@ function Factory() {
     this.generateAmmoPack = function() {
         if (player.state == STATE.DEAD) { return; }
 
-        if (ammoPacks.length <= player.score + 1) {
-            ammoPacks.push(new AmmoPack());
+        if (pickables.length <= 5) {
+            pickables.push(new AmmoPack());
         }
         var divider = Math.ceil(Math.log(player.score + 1)) + 1;
 
-        var timeout = (2000 + random() * 10000) / divider;
+        var timeout = (10000 + random() * 20000) / divider;
 
-        this.AmmoPackTimeout += timeout / 30;
+        this.ammoPackTimeout += timeout / 30;
 
     }
 
@@ -42,7 +42,15 @@ function Factory() {
         if (player.state == STATE.DEAD) { return; }
 
         if (ennemies.length <= player.score + 1) {
-            ennemies.push(new Ennemy());
+            if (random() <= 0.7) {
+                ennemies.push(new Ennemy());
+            } else {
+                if (random() <= 0.5) {
+                    ennemies.push(new FastEnnemy());
+                } else {
+                    ennemies.push(new StrongEnnemy());
+                }
+            }
         }
         var divider = Math.ceil(Math.log(player.score + 1)) + 1;
 
