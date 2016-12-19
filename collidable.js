@@ -1,20 +1,31 @@
 function Collidable() {
 
+    // Position
     this.x;
     this.y;
 
-    this.sprites;
+    // Display
+    this.nbSprites;
+    this.sprites = [];
+    this.spriteOffset = -1;
     this.scl;
 
-    this.size;
+    // Collision
+    this.size
+
+    // Movement
+    this.speed = 0;
 
     this.getSize = function() {
         return this.size;
     }
 
-    this.setSprites(entityName, nbSprites) {
-        this.sprites = getAssetManager().getSprites(entityNale, nbSprites);
-        this.size = min(this.sprites[0].width, this.sprites[0].height)/this.scl;
+    this.setSprites = function(entityName, nbSprites) {
+        this.sprites = getAssetManager().getSprites(entityName, nbSprites);
+        this.size = min(this.sprites[0].width, this.sprites[0].height) / this.scl;
+        if (this.spriteOffset == -1) {
+            this.spriteOffset = Math.ceil(random(0, this.nbSprites));
+        }
     }
 
     this.move = function(x, y) {
@@ -24,7 +35,7 @@ function Collidable() {
 
     this.hits = function(other) {
         var d = dist(this.x, this.y, other.x, other.y);
-        var dmin = this.size/2+
+        var dmin = this.size / 2 + other.size / 2;
+        return d <= dmin;
     }
-
 }

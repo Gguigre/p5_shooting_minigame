@@ -1,0 +1,3 @@
+find . -wholename "$1/*.png" | while read file; do
+  convert "$file" -rotate 90 "$file"
+done
