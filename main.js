@@ -96,8 +96,8 @@ function draw() {
                 ennemy.touched()
                 if (ennemy.state == STATE.DEAD) {
                     ennemies.splice(i, 1);
+                    player.score++;
                 }
-                player.score++;
             }
         }
     }
@@ -120,16 +120,16 @@ function keyPressed() {
     if (player.state != STATE.DEAD) {
         if (keyCode === LEFT_ARROW || key == 'Q') {
             directionKeys[2] = frameCount;
-            player.state = STATE.MOVE;
+            if (player.state != STATE.INVINCIBLE) { player.state = STATE.MOVE; }
         } else if (keyCode === RIGHT_ARROW || key == 'D') {
             directionKeys[3] = frameCount;
-            player.state = STATE.MOVE;
+            if (player.state != STATE.INVINCIBLE) { player.state = STATE.MOVE; }
         } else if (keyCode === UP_ARROW || key == 'Z') {
             directionKeys[0] = frameCount;
-            player.state = STATE.MOVE;
+            if (player.state != STATE.INVINCIBLE) { player.state = STATE.MOVE; }
         } else if (keyCode === DOWN_ARROW || key == 'S') {
             directionKeys[1] = frameCount;
-            player.state = STATE.MOVE;
+            if (player.state != STATE.INVINCIBLE) { player.state = STATE.MOVE; }
         } else if (key == ' ' || keyCode == ENTER) {
             player.shoot();
         }
@@ -160,7 +160,7 @@ function keyReleased() {
     if (keyCode === SHIFT) {
         var sum = directionKeys.reduce((pv, cv) => pv + cv, 0);
         if (sum != -4) {
-            player.state = STATE.MOVE;
+            if (player.state != STATE.INVINCIBLE) { player.state = STATE.MOVE; }
         } else {
             player.state = STATE.IDLE;
         }

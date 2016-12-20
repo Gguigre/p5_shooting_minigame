@@ -28,7 +28,7 @@ function Character() {
 
     // Move according to pathFider
     this.updatePos = function() {
-        if (this.state != STATE.MOVE || player.state == STATE.DEAD) {
+        if (this.state != STATE.MOVE && this.state != STATE.INVINCIBLE || player.state == STATE.DEAD) {
             return;
         }
         switch (this.dir) {
@@ -89,6 +89,16 @@ function Character() {
         }
         image(img, 0, 0, img.width / this.scl, img.height / this.scl);
         noTint();
+
         pop();
+
+        if (this.health > 1 && this.health < 10) {
+            var heart = getAssetManager().getSprites("infos.heart", 1)[0];
+            for (var i = 0; i < this.health; i++) {
+                image(heart, this.x - Math.floor(this.health / 2 - i) * heart.width / 10 - 3 * i, this.y - this.size, heart.width / 10, heart.height / 10);
+                // image(heart, this.x - (this.health / 2 + i) * heart.width / 10, -img.height, heart.width / 10, heart.height / 10);
+            }
+        }
+
     }
 }

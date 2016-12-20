@@ -11,5 +11,6 @@ const STATE = {
     IDLE: 'IDLE',
     RELOAD: 'RELOAD',
     AIM: 'AIM',
-    DEAD: 'DEAD'
+    DEAD: 'DEAD',
+    INVINCIBLE: 'INVINCIBLE'
 }

@@ -6,10 +6,11 @@ function Player() {
     this.tint = {
         R: 255,
         G: 255,
-        B: 255,
-        A: 0,
+        B: 255
     }
 
+    this.health = 5;
+    this.invincible = false;
     this.score = 0;
 
     this.weapon = new Weapon("rifle",
@@ -20,6 +21,23 @@ function Player() {
     );
 
     this.speed = 7;
+
+    this.touched = function() {
+        if (player.invincible == true) {
+            return;
+        }
+        this.health--;
+        if (this.health <= 0) {
+            this.state = STATE.DEAD;
+        } else {
+            player.state = STATE.INVINCIBLE;
+            player.invincible = true;
+            setTimeout(function() {
+                player.state = STATE.MOVE;
+                player.invincible = false;
+            }, 1500);
+        }
+    }
 
     this.init = function() {
         this.x = width / 2;
