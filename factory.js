@@ -12,6 +12,18 @@ function Factory() {
     this.ennemyTimeout = 0;
     this.ammoPackTimeout = 0;
 
+    this.generateLandMine = function() {
+        if (player.state == STATE.DEAD) { return; }
+
+        dropables.push(
+            new LandMine(
+                player.x,
+                player.y,
+                Math.ceil(Math.random(0, 100))
+            )
+        );
+    }
+
     this.createAmmoPack = function() {
         if (frameCount >= this.ammoPackTimeout) {
             this.generateAmmoPack();
@@ -21,8 +33,8 @@ function Factory() {
     this.generateAmmoPack = function() {
         if (player.state == STATE.DEAD) { return; }
 
-        if (pickables.length <= 5) {
-            pickables.push(new AmmoPack());
+        if (dropables.length <= 5) {
+            dropables.push(new AmmoPack());
         }
         var divider = Math.ceil(Math.log(player.score + 1)) + 1;
 

@@ -1,9 +1,12 @@
 var player;
 var bullets = [];
 var ennemies = [];
-var pickables = [];
+var dropables = [];
 var nbKills = 0;
 var ammos = [];
+var explosions = [];
+
+var music;
 
 var directionKeys = [-1, -1, -1, -1];
 
@@ -13,6 +16,8 @@ function preload() {
 
     getAssetManager().getSprites("ennemy.move", 17);
     getAssetManager().getSprites("ennemy.idle", 17);
+
+    music = getAssetManager().getSound("music");
 }
 
 function setup() {
@@ -20,6 +25,8 @@ function setup() {
 
     player = new Player();
     frameRate(30);
+
+    music.loop();
 }
 
 function draw() {
@@ -48,15 +55,15 @@ function draw() {
         bullet.draw();
     }
 
-    for (var i = pickables.length - 1; i >= 0; i--) {
-        var pickable = pickables[i];
+    for (var i = dropables.length - 1; i >= 0; i--) {
+        var dropable = dropables[i];
 
-        if (pickable.hits(player)) {
-            pickable.activate();
-            pickables.splice(i, 1);
+        if (dropable.hits(player)) {
+            if (dropable.activate()) {
+                dropables.splice(i, 1);
+            }
         }
-
-        pickable.draw();
+        dropable.draw();
     }
 
     // Ennemies

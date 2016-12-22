@@ -1,6 +1,6 @@
 function AmmoPack() {
 
-    Pickable.call(this);
+    Dropable.call(this);
 
     this.amount = Math.ceil(random(10) + 5);
     this.scl = 3;
@@ -10,6 +10,7 @@ function AmmoPack() {
 
     this.activate = function() {
         player.weapon.nbAmmo = constrain(player.weapon.nbAmmo + this.amount, 0, player.weapon.capacity);
+        return true;
     }
 
     this.getSpriteName = function() {

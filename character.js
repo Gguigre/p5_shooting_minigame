@@ -94,8 +94,13 @@ function Character() {
 
         if (this.health > 1 && this.health < 10) {
             var heart = getAssetManager().getSprites("infos.heart", 1)[0];
+            var heartScale = 15;
             for (var i = 0; i < this.health; i++) {
-                image(heart, this.x - Math.floor(this.health / 2 - i) * heart.width / 10 - 3 * i, this.y - this.size, heart.width / 10, heart.height / 10);
+                image(heart,
+                    this.x - Math.floor(this.health / 2 - i) * heart.width / heartScale,
+                    this.y - this.size,
+                    heart.width / heartScale,
+                    heart.height / heartScale);
                 // image(heart, this.x - (this.health / 2 + i) * heart.width / 10, -img.height, heart.width / 10, heart.height / 10);
             }
         }

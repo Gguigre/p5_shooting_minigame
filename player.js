@@ -36,6 +36,7 @@ function Player() {
                 player.state = STATE.MOVE;
                 player.invincible = false;
             }, 1500);
+            getFactory().generateLandMine();
         }
     }
 
