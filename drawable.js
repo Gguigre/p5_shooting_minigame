@@ -30,7 +30,7 @@ function Drawable() {
     this.draw = function() {
         this.setSprites(this.getSpriteName(), this.nbSprites);
         if (this.sprites.length == 0) { return; }
-        img = this.sprites[0];
+        img = this.sprites[frameCount % this.nbSprites];
         imageMode(CENTER);
         image(img, this.x, this.y, img.width / this.scl, img.height / this.scl);
     }

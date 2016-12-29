@@ -12,7 +12,7 @@ function LandMine(x, y, id) {
     this.text = "";
 
     getAssetManager().getSound("explode");
-    getAssetManager().getSprites("explosion", 1);
+    getAssetManager().getSprites("explosion", 9);
 
     setTimeout(function(landmine) {
         landmine.explode();
@@ -36,7 +36,7 @@ function LandMine(x, y, id) {
 
         getAssetManager().getSound("explode").play();
 
-        image(getAssetManager().getSprites("explosion", 1)[0], this.x, this.y)
+        explosions.push(new Explosion(this.x, this.y));
 
         for (var i = ennemies.length - 1; i >= 0; i--) {
             var ennemy = ennemies[i];

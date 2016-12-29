@@ -10,6 +10,7 @@ function Player() {
     }
 
     this.health = 5;
+    this.stamina = 150;
     this.invincible = false;
     this.score = 0;
 
@@ -17,7 +18,8 @@ function Player() {
         25, {
             shoot: getAssetManager().getSound("gun"),
             reload: getAssetManager().getSound("reload")
-        }
+        },
+        1000
     );
 
     this.speed = 7;
@@ -86,6 +88,38 @@ function Player() {
         this.weapon.nbAmmo--;
     }
 
+    this.dash = function() {
+        if (this.stamina < 100) {
+            return;
+        }
+        this.stamina -= 100;
+
+        var xEnd = this.x;
+        var yEnd = this.y;
+
+        switch (this.dir) {
+            case DIR.N:
+                yEnd -= 100;
+                break;
+            case DIR.S:
+                yEnd += 100;
+                break;
+            case DIR.W:
+                xEnd -= 100;
+                break;
+            case DIR.E:
+                xEnd += 100;
+                break;
+            default:
+                break;
+        }
+
+        this.speed = 30;
+        setTimeout(function() {
+            player.speed = 7
+        }, 100);
+    }
+
     this.updateDir = function() {
 
         if (this.state == STATE.DEAD) {
@@ -97,7 +131,7 @@ function Player() {
         var i = -1;
         if (sum != -4) {
             i = directionKeys.indexOf(Math.max(...directionKeys));
-        } else {
+        } else if (this.state != STATE.INVINCIBLE) {
             this.state = STATE.IDLE;
         }
 
@@ -117,6 +151,7 @@ function Player() {
             default:
                 break;
         }
+
     }
 
 }

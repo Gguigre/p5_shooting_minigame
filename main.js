@@ -5,6 +5,8 @@ var dropables = [];
 var nbKills = 0;
 var ammos = [];
 var explosions = [];
+var shots = [];
+var fpsArr = [];
 
 var music;
 
@@ -13,6 +15,7 @@ var directionKeys = [-1, -1, -1, -1];
 function preload() {
     getAssetManager().getSprites("player.rifle.idle", 20);
     getAssetManager().getSprites("player.rifle.move", 20);
+    getAssetManager().getSprites("shot", 3);
 
     getAssetManager().getSprites("ennemy.move", 17);
     getAssetManager().getSprites("ennemy.idle", 17);
@@ -32,6 +35,13 @@ function setup() {
 function draw() {
     background(75);
 
+    var fps = frameRate();
+    fill(255);
+    stroke(0);
+    textAlign(LEFT);
+    textSize(25);
+    text("FPS: " + fps.toFixed(2), 10, height - 10);
+
     player.update();
     player.draw();
 
@@ -47,12 +57,58 @@ function draw() {
         fill(255);
     }
 
+    for (var i = explosions.length - 1; i >= 0; i--) {
+        var explosion = explosions[i];
+        explosion.draw();
+        explosion.lifeTime--;
+        if (explosion.lifeTime <= 0) {
+            explosions.splice(i, 1);
+        }
+    }
+
+    for (var i = shots.length - 1; i >= 0; i--) {
+        var shot = shots[i];
+        shot.draw();
+        shot.lifeTime--;
+        if (shot.lifeTime <= 0) {
+            shots.splice(i, 1);
+        }
+    }
+
     // Bullets
     for (var i = bullets.length - 1; i >= 0; i--) {
         var bullet = bullets[i];
 
-        bullet.update();
-        bullet.draw();
+        var xStart = bullet.x;
+        var yStart = bullet.y;
+
+        var tosplice = false;
+
+        for (var j = 0; j < (player.weapon.range / bullet.speed); j++) {
+            bullet.update();
+            for (var k = ennemies.length - 1; k >= 0; k--) {
+                ennemy = ennemies[k];
+
+                if (ennemy.hits(bullet)) {
+                    tosplice = true;
+                    ennemy.touched();
+                    if (ennemy.state == STATE.DEAD) {
+                        ennemies.splice(k, 1);
+                        player.score++;
+                    }
+                    break;
+                }
+            }
+            if (bullet.x > width || bullet.y > height || bullet.x < 0 || bullet.y < 0) {
+                tosplice = true;
+                break;
+            }
+            if (tosplice) {
+                break;
+            }
+        }
+        shots.push(new Shot(xStart, yStart, bullet.x, bullet.y, bullet.dir));
+        bullets.splice(i, 1);
     }
 
     for (var i = dropables.length - 1; i >= 0; i--) {
@@ -95,25 +151,13 @@ function draw() {
         if (player.hits(ennemy)) {
             player.touched();
         }
-
-        for (var j = bullets.length - 1; j >= 0; j--) {
-            var bullet = bullets[j];
-            if (ennemy.hits(bullet)) {
-                bullets.splice(j, 1);
-                ennemy.touched()
-                if (ennemy.state == STATE.DEAD) {
-                    ennemies.splice(i, 1);
-                    player.score++;
-                }
-            }
-        }
     }
 
     textSize(32);
     fill(255);
     textAlign(LEFT);
     text("Score : " + player.score, 20, 30);
-    textAlign(RIGHT)
+    textAlign(RIGHT);
     text(player.weapon.nbAmmo + "/" + player.weapon.capacity, width - 20, height - 30);
     var bulletImg = new Info("bullet", width - 140, height - 40);
     bulletImg.draw();
@@ -137,8 +181,10 @@ function keyPressed() {
         } else if (keyCode === DOWN_ARROW || key == 'S') {
             directionKeys[1] = frameCount;
             if (player.state != STATE.INVINCIBLE) { player.state = STATE.MOVE; }
-        } else if (key == ' ' || keyCode == ENTER) {
+        } else if (keyCode == ENTER) {
             player.shoot();
+        } else if (key == ' ') {
+            player.dash();
         }
 
         if (keyCode == SHIFT) {

@@ -6,10 +6,10 @@ function Bullet(x, y, dir) {
     this.y = y;
     this.dir = dir;
     this.r = 2;
-
+    this.nbSprites = 1;
     this.size = 2 * this.r;
 
-    this.speed = 25;
+    this.speed = 1;
 
     this.update = function() {
         switch (this.dir) {
@@ -30,10 +30,6 @@ function Bullet(x, y, dir) {
         }
     }
 
-    this.draw = function() {
-        noStroke();
-        fill(150);
-        ellipse(this.x, this.y, this.r * 2, this.r * 2);
-    }
+
 
 }

@@ -45,7 +45,7 @@ function Ennemy() {
         if (player.state == STATE.DEAD) {
             return;
         }
-        if (abs(abs(this.x - player.x) - abs(this.y - player.y)) < 30) {
+        if (dist(this.x, this.y, player.x, player.y < 10) && abs(abs(this.x - player.x) - abs(this.y - player.y)) < random(30, 100)) {
 
         } else if (abs(this.x - player.x) > abs(this.y - player.y)) {
             if (this.x > player.x) {
